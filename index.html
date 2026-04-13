@@ -84,6 +84,7 @@
             border: 3px solid #8b4513;
             border-radius: 5px;
             margin: 0 auto;
+            user-select: none;
         }
 
         .board-line {
@@ -105,32 +106,33 @@
 
         .palace-lines {
             position: absolute;
-            width: 100px;
-            height: 100px;
+            width: 104px;
+            height: 104px;
         }
 
         .diagonal {
             position: absolute;
             width: 2px;
-            height: 141px;
+            height: 147px;
             background: #8b4513;
-            transform-origin: top left;
+            transform-origin: top center;
         }
 
         .piece {
             position: absolute;
-            width: 44px;
-            height: 44px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             border: 3px solid;
+            z-index: 100;
         }
 
         .piece.red {
@@ -334,41 +336,41 @@
 
             const palaceTop = document.createElement('div');
             palaceTop.className = 'palace-lines';
-            palaceTop.style.left = (OFFSET_X + 3 * CELL_SIZE - 50) + 'px';
+            palaceTop.style.left = (OFFSET_X + 3 * CELL_SIZE - 52) + 'px';
             palaceTop.style.top = (OFFSET_Y) + 'px';
             boardEl.appendChild(palaceTop);
 
             const d1 = document.createElement('div');
             d1.className = 'diagonal';
             d1.style.transform = 'rotate(45deg)';
-            d1.style.left = '0px';
+            d1.style.left = '50px';
             d1.style.top = '0px';
             palaceTop.appendChild(d1);
 
             const d2 = document.createElement('div');
             d2.className = 'diagonal';
             d2.style.transform = 'rotate(-45deg)';
-            d2.style.left = '100px';
+            d2.style.left = '50px';
             d2.style.top = '0px';
             palaceTop.appendChild(d2);
 
             const palaceBottom = document.createElement('div');
             palaceBottom.className = 'palace-lines';
-            palaceBottom.style.left = (OFFSET_X + 3 * CELL_SIZE - 50) + 'px';
+            palaceBottom.style.left = (OFFSET_X + 3 * CELL_SIZE - 52) + 'px';
             palaceBottom.style.top = (OFFSET_Y + 7 * CELL_SIZE) + 'px';
             boardEl.appendChild(palaceBottom);
 
             const d3 = document.createElement('div');
             d3.className = 'diagonal';
             d3.style.transform = 'rotate(45deg)';
-            d3.style.left = '0px';
+            d3.style.left = '50px';
             d3.style.top = '0px';
             palaceBottom.appendChild(d3);
 
             const d4 = document.createElement('div');
             d4.className = 'diagonal';
             d4.style.transform = 'rotate(-45deg)';
-            d4.style.left = '100px';
+            d4.style.left = '50px';
             d4.style.top = '0px';
             palaceBottom.appendChild(d4);
 
@@ -385,8 +387,8 @@
             const boardEl = document.getElementById('board');
             const pieceEl = document.createElement('div');
             pieceEl.className = `piece ${piece.color}`;
-            pieceEl.style.left = (OFFSET_X + col * CELL_SIZE - 22) + 'px';
-            pieceEl.style.top = (OFFSET_Y + row * CELL_SIZE - 22) + 'px';
+            pieceEl.style.left = (OFFSET_X + col * CELL_SIZE - 23) + 'px';
+            pieceEl.style.top = (OFFSET_Y + row * CELL_SIZE - 23) + 'px';
             pieceEl.textContent = PIECE_TYPES[piece.type];
             pieceEl.dataset.row = row;
             pieceEl.dataset.col = col;
@@ -395,7 +397,10 @@
                 pieceEl.classList.add('selected');
             }
 
-            pieceEl.addEventListener('click', () => handlePieceClick(row, col));
+            pieceEl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handlePieceClick(row, col);
+            });
             boardEl.appendChild(pieceEl);
         }
 
@@ -406,7 +411,10 @@
                 marker.className = 'valid-move';
                 marker.style.left = (OFFSET_X + move.col * CELL_SIZE - 10) + 'px';
                 marker.style.top = (OFFSET_Y + move.row * CELL_SIZE - 10) + 'px';
-                marker.addEventListener('click', () => makeMove(selectedPiece.row, selectedPiece.col, move.row, move.col));
+                marker.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    makeMove(selectedPiece.row, selectedPiece.col, move.row, move.col);
+                });
                 boardEl.appendChild(marker);
             });
         }
